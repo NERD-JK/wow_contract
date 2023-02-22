@@ -1,13 +1,12 @@
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 pragma solidity ^0.8.0;
 
 
-contract Haechi is ERC20, ERC20Burnable, Pausable, Ownable {
+contract Haechi is ERC20, Pausable, Ownable {
     uint8 private _decimals;
     mapping(address => bool) private _pausedUsers;
 
