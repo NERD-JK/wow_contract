@@ -111,113 +111,6 @@ abstract contract Ownable is Context {
     }
 }
 
-// File: @openzeppelin/contracts/security/Pausable.sol
-
-
-// OpenZeppelin Contracts (last updated v4.7.0) (security/Pausable.sol)
-
-pragma solidity ^0.8.0;
-
-
-/**
- * @dev Contract module which allows children to implement an emergency stop
- * mechanism that can be triggered by an authorized account.
- *
- * This module is used through inheritance. It will make available the
- * modifiers `whenNotPaused` and `whenPaused`, which can be applied to
- * the functions of your contract. Note that they will not be pausable by
- * simply including this module, only once the modifiers are put in place.
- */
-abstract contract Pausable is Context {
-    /**
-     * @dev Emitted when the pause is triggered by `account`.
-     */
-    event Paused(address account);
-
-    /**
-     * @dev Emitted when the pause is lifted by `account`.
-     */
-    event Unpaused(address account);
-
-    bool private _paused;
-
-    /**
-     * @dev Initializes the contract in unpaused state.
-     */
-    constructor() {
-        _paused = false;
-    }
-
-    /**
-     * @dev Modifier to make a function callable only when the contract is not paused.
-     *
-     * Requirements:
-     *
-     * - The contract must not be paused.
-     */
-    modifier whenNotPaused() {
-        _requireNotPaused();
-        _;
-    }
-
-    /**
-     * @dev Modifier to make a function callable only when the contract is paused.
-     *
-     * Requirements:
-     *
-     * - The contract must be paused.
-     */
-    modifier whenPaused() {
-        _requirePaused();
-        _;
-    }
-
-    /**
-     * @dev Returns true if the contract is paused, and false otherwise.
-     */
-    function paused() public view virtual returns (bool) {
-        return _paused;
-    }
-
-    /**
-     * @dev Throws if the contract is paused.
-     */
-    function _requireNotPaused() internal view virtual {
-        require(!paused(), "Pausable: paused");
-    }
-
-    /**
-     * @dev Throws if the contract is not paused.
-     */
-    function _requirePaused() internal view virtual {
-        require(paused(), "Pausable: not paused");
-    }
-
-    /**
-     * @dev Triggers stopped state.
-     *
-     * Requirements:
-     *
-     * - The contract must not be paused.
-     */
-    function _pause() internal virtual whenNotPaused {
-        _paused = true;
-        emit Paused(_msgSender());
-    }
-
-    /**
-     * @dev Returns to normal state.
-     *
-     * Requirements:
-     *
-     * - The contract must be paused.
-     */
-    function _unpause() internal virtual whenPaused {
-        _paused = false;
-        emit Unpaused(_msgSender());
-    }
-}
-
 // File: @openzeppelin/contracts/token/ERC20/IERC20.sol
 
 
@@ -729,11 +622,10 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
 
 
 
-
 pragma solidity ^0.8.0;
 
 
-contract Haechi is ERC20, Pausable, Ownable {
+contract Haechi is ERC20, Ownable {
     uint8 private _decimals;
     mapping(address => bool) private _pausedUsers;
 
@@ -747,34 +639,5 @@ contract Haechi is ERC20, Pausable, Ownable {
 
     function decimals() public view virtual override returns (uint8) {
         return _decimals;
-    }
-
-    function pause() public virtual onlyOwner {
-        _pause();
-    }
-
-    function unpause() public virtual onlyOwner {
-        _unpause();
-    }
-
-    function pauseUser(address address_) public virtual onlyOwner {
-        _pausedUsers[address_] = true;
-        emit PausedUser(msg.sender, address_);
-    }
-
-    function unpauseUser(address address_) public virtual onlyOwner {
-        _pausedUsers[address_] = false;
-        emit UnpausedUser(msg.sender, address_);
-    }
-
-    function pausedUser(address address_) public view virtual returns (bool) {
-        return _pausedUsers[address_];
-    }
-
-    function _beforeTokenTransfer(address from_, address to_, uint256 amount_) internal virtual override {
-        super._beforeTokenTransfer(from_, to_, amount_);
-
-        require(msg.sender == owner() || (msg.sender != owner() && !paused()), "ERC20Pausable: token transfer while paused");
-        require(msg.sender == owner() || (msg.sender != owner() && !pausedUser(msg.sender)), "ERC20PausableUser: user token transfer while paused");
     }
 }
