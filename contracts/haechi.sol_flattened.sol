@@ -1,4 +1,7 @@
 
+// File: contracts/parents.sol
+
+
 // File: @openzeppelin/contracts/utils/Context.sol
 
 
@@ -501,35 +504,6 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     }
 
     /**
-     * @dev Destroys `amount` tokens from `account`, reducing the
-     * total supply.
-     *
-     * Emits a {Transfer} event with `to` set to the zero address.
-     *
-     * Requirements:
-     *
-     * - `account` cannot be the zero address.
-     * - `account` must have at least `amount` tokens.
-     */
-    function _burn(address account, uint256 amount) internal virtual {
-        require(account != address(0), "ERC20: burn from the zero address");
-
-        _beforeTokenTransfer(account, address(0), amount);
-
-        uint256 accountBalance = _balances[account];
-        require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
-        unchecked {
-            _balances[account] = accountBalance - amount;
-            // Overflow not possible: amount <= accountBalance <= totalSupply.
-            _totalSupply -= amount;
-        }
-
-        emit Transfer(account, address(0), amount);
-
-        _afterTokenTransfer(account, address(0), amount);
-    }
-
-    /**
      * @dev Sets `amount` as the allowance of `spender` over the `owner` s tokens.
      *
      * This internal function is equivalent to `approve`, and can be used to
@@ -624,14 +598,14 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
 
 pragma solidity ^0.8.0;
 
+// File: contracts/haechi.sol
+
+pragma solidity ^0.8.0;
+
 
 contract Haechi is ERC20, Ownable {
     uint8 private _decimals;
-    mapping(address => bool) private _pausedUsers;
 
-    event PausedUser(address sender, address account);
-    event UnpausedUser(address sender, address account);
-    
     constructor() ERC20("Haechi", "HAC") {
         _decimals = 18;
         _mint(msg.sender, 1000000000 * 10 ** decimals());
