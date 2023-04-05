@@ -5,12 +5,12 @@ pragma solidity ^0.8.0;
 
 import "contracts/parents.sol";
 
-contract Haechi is ERC20, Ownable {
+contract Wow is ERC20, Ownable {
     uint8 private _decimals;
 
-    constructor() ERC20("Haechi", "HAC") {
+    constructor() ERC20("WOWMetaverse", "WOW") {
         _decimals = 18;
-        _mint(msg.sender, 1000000000 * 10 ** decimals());
+        _mint(msg.sender, 10000000000 * 10 ** decimals());
     }
 
     function decimals() public view virtual override returns (uint8) {
